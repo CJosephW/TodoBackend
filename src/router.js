@@ -2,9 +2,25 @@ import express, {Router} from 'express';
 import TodoItem from './models/TodoItem';
 
 const router = Router();
-
+router.delete('/todo/:key', (req, res) => {
+    TodoItem.remove({
+        key: req.params.key
+    }).then((result) => {
+        if(result.deletedCount === 0) {
+            res.status(404).send("Couldn't find");
+        }
+    
+        res.json({message: 'Deleted'});
+        res.status(200).send();
+    }); 
+});
 router.route('/todo')
+    .delete((req, res) =>{
+
+    })
     .post((req, res) => {
+        
+        console.log(req.body)
         res.json(req.body)
 
         var item = new TodoItem();
@@ -13,11 +29,11 @@ router.route('/todo')
         item.key = req.body.key;
         
         item.save()
-        .then(item => {
-            res.send("Item saved")
+        .then(send_item => {
+            res.send("Item saved");
         })
         .catch(err =>{
-            res.status(400).send("unable to save")
+            res.status(400).send("unable to save");
         })
 
     })

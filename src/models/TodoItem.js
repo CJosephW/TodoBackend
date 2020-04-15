@@ -3,12 +3,12 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const schema = new Schema({
-    text : {
-        type: String,
-    },
-    key: {
-        type: Number,
-    }
+    text :{
+        type:String,
+        required: true
+        },
+    key: Number,
+
 });
 
 

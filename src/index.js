@@ -1,24 +1,31 @@
-//importing express
-import TodoItem from './models/TodoItem';
-import router from './router';
+import express from 'express';
+import morgan from 'morgan';
 import mongoose from 'mongoose';
+import router from './router';
+import bodyParser from 'express';
 
-mongoose.Promise = global.Promise;
+//initalize http server
+mongoose.set('useUnifiedTopology', true);
+mongoose.connect('mongodb://localhost:27017', {useNewUrlParser:true});
 
-let express = require('express')
-
-let app = express();
-
-app.use('/', router);
-
-mongoose.connect('mongodb://localhost:27017/db')
-
-mongoose.connect('mongodb://localhost:27017/db')
-  .then(() => {
-    console.log('mongodb started.');
-    app.listen(8000, () => {
-      console.log('Server started on 8000');
+const app = express();
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
     });
-  }).catch(() => {
-    console.log('Mongodb connection failed.');
-  })
+
+app.use(bodyParser.json());
+app.use(morgan('combined'));
+
+app.get('/', (req, res) => res.send('hello dad'))
+
+app.use('/v1', router);
+
+//launch the server on port 3000
+const server = app.listen(3000, () => {
+	const { address, port } = server.address();
+	console.log(`listening at http://${address}:${port}`);
+});

@@ -27,6 +27,7 @@ router.route('/todo')
         
         item.text = req.body.text;
         item.key = req.body.key;
+        item.day = req.body.day;
         
         item.save()
         .then(send_item => {

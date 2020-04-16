@@ -8,7 +8,7 @@ const schema = new Schema({
         required: true
         },
     key: Number,
-
+    day : String,
 });
 
 
